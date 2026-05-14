@@ -1,0 +1,30 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/link-cable-core",
+    "crates/link-cable-cli",
+    "crates/link-cable-dist",
+]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.95"
+license = "MIT"
+repository = "https://github.com/constantin-jais/link-cable"
+
+[workspace.dependencies]
+async-trait = "0.1"
+clap = { version = "4", features = ["derive"] }
+miette = { version = "7", features = ["fancy"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+toml = "0.8"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+tempfile = "3"
+link-cable-core = { path = "crates/link-cable-core" }
+link-cable-dist = { path = "crates/link-cable-dist" }
+
+[profile.release]
+strip = true
+lto = "thin"

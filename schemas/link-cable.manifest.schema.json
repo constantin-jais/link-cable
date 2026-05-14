@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/constantin-jais/link-cable/schemas/link-cable.manifest.schema.json",
+  "title": "Link Cable manifest",
+  "type": "object",
+  "required": [
+    "package",
+    "core",
+    "platforms",
+    "channels"
+  ],
+  "properties": {
+    "package": {
+      "type": "object",
+      "required": [
+        "name",
+        "version",
+        "repository"
+      ]
+    },
+    "core": {
+      "type": "object",
+      "required": [
+        "language",
+        "workspace",
+        "binary"
+      ]
+    },
+    "policy": {
+      "type": "object"
+    },
+    "platforms": {
+      "type": "array"
+    },
+    "channels": {
+      "type": "array"
+    }
+  }
+}

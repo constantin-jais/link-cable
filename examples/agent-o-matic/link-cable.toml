@@ -1,0 +1,38 @@
+[package]
+name = "agent-o-matic"
+version = "0.0.0"
+repository = "https://github.com/constantin-jais/Agent-O-Matic"
+
+[core]
+language = "rust"
+workspace = "."
+binary = "aom"
+
+[policy]
+append_only = true
+keyless_preferred = true
+require_slsa = true
+require_sbom = true
+require_checksums = true
+require_signatures = true
+require_sovereign_floor = true
+
+[[platforms]]
+os = "linux"
+arch = "x86_64"
+target = "x86_64-unknown-linux-gnu"
+packages = ["tar.gz"]
+sovereign_floor = ["direct-download"]
+
+[[platforms]]
+os = "macos"
+arch = "aarch64"
+target = "aarch64-apple-darwin"
+packages = ["tar.gz"]
+sovereign_floor = ["direct-download"]
+
+[[channels]]
+name = "direct"
+kind = "direct-download"
+prerelease = true
+stable = true
