@@ -1,19 +1,19 @@
-# ADR-0001 — Product boundary and extraction from Agent-O-Matic
+# ADR-0001 — Product boundary and extraction from cos-matic
 
 - Status: Accepted
 - Date: 2026-06-29
-- Origin doctrine: Agent-O-Matic ADR-0029 through ADR-0032
+- Origin doctrine: cos-matic ADR-0029 through ADR-0032
 
 ## Context
 
-Agent-O-Matic needs a multi-platform distribution substrate: build matrices,
+cos-matic needs a multi-platform distribution substrate: build matrices,
 artifacts, install/update/doctor flows, release manifests, checksums,
 signatures, provenance, bindings, and channel publishing primitives. That surface
 has its own governance, security model, and release cadence.
 
 ## Decision
 
-Extract that distribution substrate into **Link Cable**. Agent-O-Matic remains the
+Extract that distribution substrate into **Link Cable**. cos-matic remains the
 autonomy/config/harness product and becomes Link Cable's first consumer.
 
 Link Cable owns:
@@ -25,11 +25,11 @@ Link Cable owns:
   SBOM, and sovereign install floors;
 - channel-side traits and dry-run-first CLI commands.
 
-Link Cable does not own Agent-O-Matic manifest compilation, app UI, GitHub issue
+Link Cable does not own cos-matic manifest compilation, app UI, GitHub issue
 orchestration, or runtime deployment semantics.
 
 ## Consequences
 
-- Agent-O-Matic can consume distribution as an external tool rather than copying internals.
+- cos-matic can consume distribution as an external tool rather than copying internals.
 - Link Cable can be reused by other Rust-first developer tools.
 - Distribution-sensitive dependencies and signing policy stay outside the autonomy product.

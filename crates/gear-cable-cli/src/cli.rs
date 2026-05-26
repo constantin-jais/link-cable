@@ -2,12 +2,12 @@ use std::fs;
 use std::path::PathBuf;
 
 use clap::{Parser, Subcommand, ValueEnum};
-use link_cable_core::{Host, parse_manifest, plan, validate_policy};
+use gear_cable_core::{Host, parse_manifest, plan, validate_policy};
 use miette::{IntoDiagnostic, Result, miette};
 
 #[derive(Debug, Parser)]
 #[command(
-    name = "link-cable",
+    name = "gear-cable",
     version,
     about = "Rust-first distribution substrate"
 )]
@@ -39,7 +39,7 @@ pub fn run() -> Result<()> {
     let cli = Cli::parse();
     match cli.command {
         Command::Doctor => {
-            println!("link-cable doctor: ok (dry-run only, no publish credentials required)");
+            println!("gear-cable doctor: ok (dry-run only, no publish credentials required)");
             Ok(())
         }
         Command::Plan { manifest, format } => {

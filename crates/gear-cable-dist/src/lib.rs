@@ -4,7 +4,7 @@
 //! append-only publish can be rolled back. Recovery is `compensate`.
 
 use async_trait::async_trait;
-use link_cable_core::DistributionPlan;
+use gear_cable_core::DistributionPlan;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 

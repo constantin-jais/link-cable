@@ -28,7 +28,7 @@ jobs:
       - name: Test
         run: cargo test --workspace --all-features
       - name: Core portability
-        run: cargo build -p link-cable-core --target wasm32-unknown-unknown
+        run: cargo build -p gear-cable-core --target wasm32-unknown-unknown
 
   supply-chain:
     runs-on: ubuntu-latest

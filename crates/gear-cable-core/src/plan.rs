@@ -157,7 +157,7 @@ mod tests {
     #[test]
     fn plan_is_deterministic_and_includes_required_actions() {
         let manifest = parse_manifest(include_str!(
-            "../../../examples/agent-o-matic/link-cable.toml"
+            "../../../examples/cos-matic/gear-cable.toml"
         ))
         .unwrap();
         let plan = plan(
@@ -168,7 +168,7 @@ mod tests {
             },
         )
         .unwrap();
-        assert_eq!(plan.package, "agent-o-matic");
+        assert_eq!(plan.package, "cos-matic");
         assert!(!plan.artifacts.is_empty());
         assert!(
             plan.actions

@@ -140,9 +140,9 @@ mod tests {
 
     const GOOD: &str = r#"
 [package]
-name = "agent-o-matic"
+name = "cos-matic"
 version = "0.0.0"
-repository = "https://github.com/constantin-jais/Agent-O-Matic"
+repository = "https://github.com/constantin-jais/cos-matic"
 
 [core]
 language = "rust"

@@ -177,6 +177,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "gear-cable-cli"
+version = "0.0.0"
+dependencies = [
+ "clap",
+ "gear-cable-core",
+ "miette",
+ "serde_json",
+]
+
+[[package]]
+name = "gear-cable-core"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "thiserror",
+ "toml",
+]
+
+[[package]]
+name = "gear-cable-dist"
+version = "0.0.0"
+dependencies = [
+ "async-trait",
+ "gear-cable-core",
+ "serde",
+ "thiserror",
+]
+
+[[package]]
 name = "gimli"
 version = "0.32.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -227,35 +256,6 @@ name = "libc"
 version = "0.2.186"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68ab91017fe16c622486840e4c83c9a37afeff978bd239b5293d61ece587de66"
-
-[[package]]
-name = "link-cable-cli"
-version = "0.0.0"
-dependencies = [
- "clap",
- "link-cable-core",
- "miette",
- "serde_json",
-]
-
-[[package]]
-name = "link-cable-core"
-version = "0.0.0"
-dependencies = [
- "serde",
- "thiserror",
- "toml",
-]
-
-[[package]]
-name = "link-cable-dist"
-version = "0.0.0"
-dependencies = [
- "async-trait",
- "link-cable-core",
- "serde",
- "thiserror",
-]
 
 [[package]]
 name = "linux-raw-sys"

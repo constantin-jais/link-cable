@@ -1,16 +1,16 @@
 [workspace]
 resolver = "3"
 members = [
-    "crates/link-cable-core",
-    "crates/link-cable-cli",
-    "crates/link-cable-dist",
+    "crates/gear-cable-core",
+    "crates/gear-cable-cli",
+    "crates/gear-cable-dist",
 ]
 
 [workspace.package]
 edition = "2024"
 rust-version = "1.95"
 license = "MIT"
-repository = "https://github.com/constantin-jais/link-cable"
+repository = "https://github.com/constantin-jais/gear-cable"
 
 [workspace.dependencies]
 async-trait = "0.1"
@@ -22,8 +22,8 @@ thiserror = "2"
 toml = "0.8"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 tempfile = "3"
-link-cable-core = { path = "crates/link-cable-core" }
-link-cable-dist = { path = "crates/link-cable-dist" }
+gear-cable-core = { path = "crates/gear-cable-core" }
+gear-cable-dist = { path = "crates/gear-cable-dist" }
 
 [profile.release]
 strip = true

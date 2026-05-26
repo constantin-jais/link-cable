@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/constantin-jais/link-cable/schemas/link-cable.manifest.schema.json",
+  "$id": "https://github.com/constantin-jais/gear-cable/schemas/gear-cable.manifest.schema.json",
   "title": "Link Cable manifest",
   "type": "object",
   "required": [
