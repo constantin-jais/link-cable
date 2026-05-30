@@ -1,4 +1,4 @@
-# Link Cable ADRs
+# gear-cable ADRs
 
 | ADR | Status | Topic |
 | --- | --- | --- |
