@@ -1,90 +1,37 @@
-# gear-cable
+# Gear Cable
 
-> Rust-first distribution substrate for multi-platform developer tools — build matrices, artifact graphs, release manifests, checksums, signatures, provenance, and sovereign install floors.
+**Layer:** Gear — Infrastructure  
+**Role:** Rust-first release and distribution wiring  
+**Mission:** define how tools become reproducible, verifiable, installable artifacts across targets.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Rust 1.95+](https://img.shields.io/badge/Rust-1.95%2B-orange.svg)](https://www.rust-lang.org)
-[![CI](https://github.com/constantin-jais/gear-cable/actions/workflows/ci.yml/badge.svg)](https://github.com/constantin-jais/gear-cable/actions/workflows/ci.yml)
+---
 
-> **Status:** `v0` · WIP — core manifest/artifact model proven; install/update/doctor flows in progress.
+## Purpose
 
-## Why it exists
+`gear-cable` is the interconnection and release substrate of the ecosystem. It treats Rust as a strong universal source and produces explicit artifact plans for multiple platforms and runtimes.
 
-Distribution logic for developer tools tends to get reimplemented in each consumer: install scripts, update flows, artifact verification. `gear-cable` extracts that layer into a single Rust core, so cos-matic and other tools get forward-only releases, signed artifacts, and store-free install paths without duplicating the logic.
+It connects build outputs to distribution without absorbing product logic.
 
-## Ecosystem
+## Owns
 
-```mermaid
-graph TB
-    subgraph products["🎯 Rumble products"]
-        RL["rumble-lm<br/>Collaborative learning platform"]
-        RC["rumble-cos<br/>Public knowledge site"]
-    end
-    subgraph tools["🛠️ Sovereign tooling"]
-        CM["cos-matic<br/>Agent config + autonomous code-ops"]
-        WL["wrench-loader<br/>Document ingestion worker"]
-        GM["gear-memory<br/>Local agent context"]
-    end
-    subgraph infra["⚙️ Infrastructure"]
-        GC["gear-cable<br/>Distribution substrate"]
-        GD["gear-depot<br/>Registry proxy/cache"]
-        VI["vault-inspector<br/>Postgres security audit"]
-    end
-    RL --> WL
-    RL --> GM
-    RL --> VI
-    RL --> GD
-    RL --> GC
-    RC --> RL
-    CM --> GC
-    WL --> GM
-    style GC fill:#dbeafe,stroke:#2563eb,stroke-width:2px
-```
+- Artifact plans, checksums, signatures, provenance, and release metadata.
+- Forward-only release flows and install floors.
+- Cross-target packaging/distribution conventions.
+- Runtime and platform wiring needed to ship developer tools reliably.
 
-## Doctrine
+## Does Not Own
 
-- **Forward-only releases** — publish is append-only; recovery is `compensate`, not rollback.
-- **Signed artifacts** — checksums, signatures, SBOM, and provenance are modeled as release gates.
-- **Sovereign install floors** — every supported platform needs at least one store-free install path (iOS EU DMA caveat documented).
-- **One Rust core** — generated bindings may expose the core, but distribution logic is not reimplemented in Swift/Kotlin/TypeScript.
-- **Dry-run by default** — planning and doctor commands are safe; mutating publish/promote commands require explicit opt-in.
+- Supply-chain registry/cache policy: belongs to `gear-depot`.
+- Long-term context or semantic memory: belongs to `gear-memory`.
+- Product workflows or UI: belongs to Rumble.
+- Agent decisions: belongs to Bolt.
 
-## Workspace
+## Allowed Dependencies
 
-| Crate             | Role                                                               |
-| ----------------- | ------------------------------------------------------------------ |
-| `gear-cable-core` | Pure Rust core: manifests, platforms, artifact graph, policy gates |
-| `gear-cable-dist` | Side-effect boundary for distribution channels                     |
-| `gear-cable-cli`  | `gear-cable` command surface                                       |
+- Publishes metadata and artifacts that `gear-depot` can verify/distribute.
+- Supports Wrench and Rumble projects that need reproducible release flows.
+- Should remain self-hostable and independent from proprietary release platforms.
 
-## Quick start
+## Product Vision Challenge
 
-```bash
-cargo run -p gear-cable-cli -- doctor
-cargo run -p gear-cable-cli -- plan --manifest examples/cos-matic/gear-cable.toml
-cargo run -p gear-cable-cli -- plan --manifest examples/cos-matic/gear-cable.toml --format json
-```
-
-## Development
-
-```bash
-cargo fmt --all --check
-RUSTFLAGS="-D warnings" cargo clippy --workspace --all-targets --all-features
-cargo test --workspace --all-features
-./scripts/audit-deps.sh
-```
-
-## Related projects
-
-| Repo                                                                  | Role                                                       |
-| --------------------------------------------------------------------- | ---------------------------------------------------------- |
-| [cos-matic](https://github.com/constantin-jais/cos-matic)     | Primary consumer — distribution substrate for cosmatic releases |
-| [rumble-lm](https://github.com/constantin-jais/rumble-lm)          | Sovereign learning platform                                |
-| [wrench-loader](https://github.com/constantin-jais/wrench-loader)         | Document ingestion worker                                  |
-| [gear-memory](https://github.com/constantin-jais/gear-memory)         | Local agent context layer                                  |
-| [gear-depot](https://github.com/constantin-jais/gear-depot)       | Sovereign registry proxy / cache                           |
-| [vault-inspector](https://github.com/constantin-jais/vault-inspector) | Postgres security audit                                    |
-
-## License
-
-MIT © Constantin Jais
+`gear-cable` must stay distribution plumbing, not application runtime logic. Its value is reproducible, sovereign delivery across targets.
