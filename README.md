@@ -6,6 +6,15 @@
 
 ---
 
+## Stack Role
+
+- **Maturity:** `contract-first`.
+- **Current increment:** P1 CLI/library proof.
+- **Learning value:** reproducible release planning, checksums, target matrices, and distribution boundaries.
+- **Next quality step:** connect release plans to `gear-depot` artifact manifests and verification.
+
+See the ecosystem cockpit in [`constantin-jais/ecosystem/status.md`](https://github.com/constantin-jais/constantin-jais/blob/main/ecosystem/status.md).
+
 ## Purpose
 
 `gear-cable` is the interconnection and release substrate of the ecosystem. It treats Rust as a strong universal source and produces explicit artifact plans for multiple platforms and runtimes.
