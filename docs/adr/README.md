@@ -7,3 +7,4 @@
 | [0003](0003-forward-only-distribution.md) | Accepted | Append-only, forward-only distribution semantics |
 | [0004](0004-supply-chain-sovereignty.md) | Accepted | Keyless publishing, provenance, SBOM, sovereign floor |
 | [0005](0005-native-bindings-matrix.md) | Accepted | Native UI/bindings matrix ownership |
+| [0006](0006-app-store-connect-channel.md) | Accepted | App Store Connect release channel |

@@ -26,6 +26,7 @@ It connects build outputs to distribution without absorbing product logic.
 - Artifact plans, checksums, signatures, provenance, and release metadata.
 - Forward-only release flows and install floors.
 - Cross-target packaging/distribution conventions.
+- Channel adapters for append-only publication flows, including App Store Connect for iOS-capable Rumble products.
 - Runtime and platform wiring needed to ship developer tools reliably.
 
 ## Does Not Own

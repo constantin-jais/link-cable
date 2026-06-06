@@ -156,10 +156,8 @@ mod tests {
 
     #[test]
     fn plan_is_deterministic_and_includes_required_actions() {
-        let manifest = parse_manifest(include_str!(
-            "../../../examples/cos-matic/gear-cable.toml"
-        ))
-        .unwrap();
+        let manifest =
+            parse_manifest(include_str!("../../../examples/cos-matic/gear-cable.toml")).unwrap();
         let plan = plan(
             &manifest,
             Host {

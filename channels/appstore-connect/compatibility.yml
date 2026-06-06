@@ -1,0 +1,23 @@
+tool: rorkai/App-Store-Connect-CLI
+contract: app-store-release.v0.1
+current_version: "PIN_ME"
+install_source: "https://github.com/rorkai/App-Store-Connect-CLI"
+release_policy:
+  auto_upgrade_release_jobs: false
+  update_branch_prefix: "chore/update-app-store-connect-cli"
+  required_checks:
+    - wrapper_validate
+    - cli_help_or_compat
+    - dry_run_command_mapping
+commands_used:
+  - validate
+  - upload-build
+  - upload-metadata
+  - submit-review
+  - status
+ci:
+  wrapper: gear-cable/channels/appstore-connect/appstore-release.sh
+  gitlab_template: gear-cable/templates/gitlab/ios-appstore-connect.yml
+notes:
+  - "Keep product pipelines coupled to the wrapper, never directly to upstream CLI flags."
+  - "Replace PIN_ME after selecting the exact upstream release/tag."
