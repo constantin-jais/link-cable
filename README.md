@@ -1,19 +1,53 @@
 # Gear Cable
 
+[![CI](https://github.com/constantin-jais/gear-cable/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/constantin-jais/gear-cable/actions/workflows/ci.yml)
+[![Security](https://github.com/constantin-jais/gear-cable/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/constantin-jais/gear-cable/actions/workflows/security.yml)
+[![Contracts](https://github.com/constantin-jais/gear-cable/actions/workflows/contracts.yml/badge.svg?branch=main)](https://github.com/constantin-jais/gear-cable/actions/workflows/contracts.yml)
+[![Release](https://github.com/constantin-jais/gear-cable/actions/workflows/release.yml/badge.svg)](https://github.com/constantin-jais/gear-cable/actions/workflows/release.yml)
+
 **Layer:** Gear — Infrastructure  
 **Role:** Rust-first release and distribution wiring  
 **Mission:** define how tools become reproducible, verifiable, installable artifacts across targets.
 
 ---
 
-## Stack Role
+## Stack role
 
+- **Layer:** Gear — Infrastructure.
+- **Role:** Rust-first release and distribution wiring.
+- **Mission:** define how tools become reproducible, verifiable, installable artifacts across targets.
 - **Maturity:** `contract-first`.
+- **Scale-ready:** no — CLI/library proof exists, but release plans still need Depot manifest verification.
 - **Current increment:** P1 CLI/library proof.
 - **Learning value:** reproducible release planning, checksums, target matrices, and distribution boundaries.
 - **Next quality step:** connect release plans to `gear-depot` artifact manifests and verification.
 
 See the ecosystem cockpit in [`constantin-jais/ecosystem/status.md`](https://github.com/constantin-jais/constantin-jais/blob/main/ecosystem/status.md).
+
+## Dogfooding
+
+This repository is part of the forge dogfooding loop: the ecosystem should use its own tools to make specs, maturity, contracts, releases, and product documentation observable.
+
+Current visible evidence:
+
+- release and CI workflows exercise reproducible release wiring;
+- contracts describe target matrices, checksums, and artifact handoff boundaries;
+- README maturity notes keep distribution limits explicit.
+
+Expected next evidence:
+
+- publish example release plans and checksum outputs;
+- connect release-plan evidence to Gear Depot manifests.
+
+Dogfooding claims should stay backed by visible commands, fixtures, CI workflows, generated reports, or linked docs.
+
+## Forge role
+
+`gear-cable` is Gear distribution plumbing. It helps Rumble products, Wrench tools, and Bolt/Gear components become reproducible, checksummed, installable artifacts without each repo inventing release wiring.
+
+## Boundary
+
+It must not own application runtime logic, product UX, supply-chain registry policy, memory, or agent decisions. Depot owns verification/cache policy; products own user workflows; Bolt owns orchestration.
 
 ## Purpose
 
