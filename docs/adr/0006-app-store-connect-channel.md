@@ -5,7 +5,7 @@
 
 ## Context
 
-Rumble products that ship iOS builds need a reproducible publication path to TestFlight and App Store review. The selected upstream tool is `rorkai/App-Store-Connect-CLI`.
+Rumble products that ship iOS builds need a reproducible publication path to TestFlight and App Store review. The selected upstream tool is `rorkai/App-Store-Connect-CLI`, pinned initially to `asc 2.5.0`.
 
 Directly calling that CLI from each product pipeline would couple product repositories to upstream command/flag changes and duplicate release policy.
 
@@ -14,6 +14,7 @@ Directly calling that CLI from each product pipeline would couple product reposi
 Gear Cable owns the App Store Connect release adapter as a distribution channel:
 
 - wrapper: `channels/appstore-connect/appstore-release.sh`;
+- installer/checksum verification: `channels/appstore-connect/install-asc.sh`;
 - compatibility metadata: `channels/appstore-connect/compatibility.yml`;
 - GitLab template: `templates/gitlab/ios-appstore-connect.yml`;
 - cross-stack contract: `specs/shared/contracts/app-store-release.v0.1.md`.

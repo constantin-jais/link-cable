@@ -1,0 +1,24 @@
+{
+  "version": "app-store-release.v0.1",
+  "app": {
+    "name": "rumble-example",
+    "bundle_id": "fr.example.rumble",
+    "app_store_id": "1234567890",
+    "primary_locale": "fr-FR"
+  },
+  "release": {
+    "version": "1.2.3",
+    "ipa_path": "dist/rumble-example.ipa",
+    "metadata_path": "appstore/metadata",
+    "screenshots_path": "appstore/screenshots"
+  },
+  "policy": {
+    "manual_submit_review": true,
+    "append_only": true,
+    "requires_human_approval": true
+  },
+  "upstream": {
+    "cli_version": "2.5.0",
+    "compatibility_profile": "asc-2.5.0"
+  }
+}

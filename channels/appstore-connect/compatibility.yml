@@ -1,23 +1,35 @@
 tool: rorkai/App-Store-Connect-CLI
+binary: asc
 contract: app-store-release.v0.1
-current_version: "PIN_ME"
-install_source: "https://github.com/rorkai/App-Store-Connect-CLI"
+current_version: "2.5.0"
+install_source: "https://github.com/rorkai/App-Store-Connect-CLI/releases/tag/2.5.0"
+license: MIT
+telemetry:
+  default_in_ci: disabled
+  env: ASC_TELEMETRY_DISABLED=1
 release_policy:
   auto_upgrade_release_jobs: false
   update_branch_prefix: "chore/update-app-store-connect-cli"
   required_checks:
     - wrapper_validate
-    - cli_help_or_compat
+    - cli_version
+    - cli_help
     - dry_run_command_mapping
 commands_used:
-  - validate
-  - upload-build
-  - upload-metadata
-  - submit-review
-  - status
+  auth: "auth login --bypass-keychain --name {AUTH_NAME} --key-id {KEY_ID} --issuer-id {ISSUER_ID} --private-key {KEY_FILE}"
+  upload_build: "builds upload --app {APP_ID} --ipa {IPA} --wait --output json"
+  upload_metadata: "metadata apply --app {APP_ID} --version {VERSION} --dir {METADATA}"
+  upload_screenshots: "screenshots apply --app {APP_ID} --version {VERSION} --review-output-dir {SCREENSHOTS} --confirm"
+  submit_review: "publish appstore --app {APP_ID} --ipa {IPA} --version {VERSION} --submit --confirm"
+  status: "status --app {APP_ID} --output json"
+  compat: "version"
 ci:
+  installer: gear-cable/channels/appstore-connect/install-asc.sh
   wrapper: gear-cable/channels/appstore-connect/appstore-release.sh
   gitlab_template: gear-cable/templates/gitlab/ios-appstore-connect.yml
+consumption:
+  recommended: "CI checkout of a pinned Gear Cable tag/artifact"
+  product_repos: "do not vendor upstream asc flags; call Gear Cable wrapper only"
 notes:
-  - "Keep product pipelines coupled to the wrapper, never directly to upstream CLI flags."
-  - "Replace PIN_ME after selecting the exact upstream release/tag."
+  - "Product release jobs must pin both Gear Cable and asc."
+  - "Update command mappings only through Gear Cable compatibility PRs."

@@ -1,0 +1,131 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: gear-cable ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            archive: tar.gz
+            bin: gear-cable
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            archive: tar.gz
+            bin: gear-cable
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            archive: tar.gz
+            bin: gear-cable
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            archive: zip
+            bin: gear-cable.exe
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+      - name: Build release binary
+        run: cargo build --release -p gear-cable-cli --target ${{ matrix.target }}
+      - name: Package Unix
+        if: matrix.archive == 'tar.gz'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/package
+          cp "target/${{ matrix.target }}/release/${{ matrix.bin }}" dist/package/
+          archive="gear-cable-${{ matrix.target }}.tar.gz"
+          tar -C dist/package -czf "dist/${archive}" "${{ matrix.bin }}"
+          shasum -a 256 "dist/${archive}" > "dist/${archive}.sha256"
+          sha256=$(shasum -a 256 "dist/${archive}" | awk '{print $1}')
+          cat > "dist/${archive}.provenance.json" <<JSON
+          {"repository":"${{ github.repository }}","ref":"${{ github.ref }}","sha":"${{ github.sha }}","run_id":"${{ github.run_id }}","target":"${{ matrix.target }}","artifact":"${archive}","sha256":"${sha256}"}
+          JSON
+      - name: Package Windows
+        if: matrix.archive == 'zip'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/package
+          Copy-Item "target/${{ matrix.target }}/release/${{ matrix.bin }}" dist/package/
+          $archive = "gear-cable-${{ matrix.target }}.zip"
+          Compress-Archive -Path "dist/package/${{ matrix.bin }}" -DestinationPath "dist/$archive"
+          $hash = (Get-FileHash "dist/$archive" -Algorithm SHA256).Hash.ToLower()
+          "$hash  $archive" | Out-File "dist/$archive.sha256" -Encoding ascii
+          @{ repository='${{ github.repository }}'; ref='${{ github.ref }}'; sha='${{ github.sha }}'; run_id='${{ github.run_id }}'; target='${{ matrix.target }}'; artifact=$archive; sha256=$hash } | ConvertTo-Json -Compress | Out-File "dist/$archive.provenance.json" -Encoding utf8
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: gear-cable-${{ matrix.target }}
+          path: dist/*
+          retention-days: 14
+
+  sbom:
+    name: SBOM CycloneDX
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - name: Install cargo-cyclonedx
+        run: cargo install cargo-cyclonedx --locked
+      - name: Generate SBOM
+        run: |
+          mkdir -p dist
+          cargo cyclonedx --format json --manifest-path crates/gear-cable-cli/Cargo.toml --override-filename gear-cable.cdx
+          mv crates/gear-cable-cli/gear-cable.cdx.json dist/gear-cable.cdx.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: gear-cable-sbom
+          path: dist/gear-cable.cdx.json
+          retention-days: 14
+
+  attest:
+    name: Artifact provenance attestations
+    needs: [build, sbom]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          path: dist-all
+      - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
+        with:
+          subject-path: dist-all/**
+
+  github-release:
+    name: GitHub Release upload
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build, sbom, attest]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          path: dist-all
+      - name: Publish release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "$TAG" --notes "gear-cable release $TAG"
+          find dist-all -type f -print0 | xargs -0 gh release upload "$TAG" --clobber

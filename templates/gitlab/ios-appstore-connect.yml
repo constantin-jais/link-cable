@@ -1,16 +1,27 @@
 # Gear Cable GitLab CI template for Rumble iOS App Store publication.
-# Include from product repositories and set ASC_CLI_BIN plus ASC_CMD_* mappings
-# according to the pinned rorkai/App-Store-Connect-CLI version.
 #
-# GEAR_CABLE_DIR must point to a checked-out or vendored gear-cable tree.
+# Product repos consume Gear Cable, not upstream asc flags directly.
+# Recommended: set GEAR_CABLE_REPOSITORY and a pinned GEAR_CABLE_REF tag/SHA.
 
 .appstore_connect_base:
   stage: release
   variables:
     ASC_RELEASE_CONFIG: "appstore/release.config.json"
     ASC_DRY_RUN: "0"
+    ASC_VERSION: "2.5.0"
+    ASC_INSTALL_DIR: ".gear-cable/bin"
+    ASC_CLI_BIN: ".gear-cable/bin/asc"
     GEAR_CABLE_DIR: "gear-cable"
+    GEAR_CABLE_REPOSITORY: ""
+    GEAR_CABLE_REF: "main"
   before_script:
+    - |
+      if [ ! -d "$GEAR_CABLE_DIR" ]; then
+        test -n "$GEAR_CABLE_REPOSITORY"
+        git clone --depth 1 --branch "$GEAR_CABLE_REF" "$GEAR_CABLE_REPOSITORY" "$GEAR_CABLE_DIR"
+      fi
+    - test -x "$GEAR_CABLE_DIR/channels/appstore-connect/install-asc.sh"
+    - ASC_VERSION="$ASC_VERSION" ASC_INSTALL_DIR="$ASC_INSTALL_DIR" "$GEAR_CABLE_DIR/channels/appstore-connect/install-asc.sh"
     - test -x "$GEAR_CABLE_DIR/channels/appstore-connect/appstore-release.sh"
     - "$GEAR_CABLE_DIR/channels/appstore-connect/appstore-release.sh" validate
   rules:
@@ -27,11 +38,12 @@ release:ios:testflight:
   script:
     - "$GEAR_CABLE_DIR/channels/appstore-connect/appstore-release.sh" upload-build --ipa "${IPA_PATH:-}"
     - "$GEAR_CABLE_DIR/channels/appstore-connect/appstore-release.sh" upload-metadata
+    - "$GEAR_CABLE_DIR/channels/appstore-connect/appstore-release.sh" upload-screenshots
 
 release:ios:submit:
   extends: .appstore_connect_base
   script:
-    - "$GEAR_CABLE_DIR/channels/appstore-connect/appstore-release.sh" submit-review
+    - "$GEAR_CABLE_DIR/channels/appstore-connect/appstore-release.sh" submit-review --ipa "${IPA_PATH:-}"
   environment:
     name: app-store-production
 
@@ -39,6 +51,19 @@ appstore-cli:compatibility-check:
   stage: release
   variables:
     ASC_DRY_RUN: "1"
+    ASC_VERSION: "2.5.0"
+    ASC_INSTALL_DIR: ".gear-cable/bin"
+    ASC_CLI_BIN: ".gear-cable/bin/asc"
+    GEAR_CABLE_DIR: "gear-cable"
+    GEAR_CABLE_REPOSITORY: ""
+    GEAR_CABLE_REF: "main"
+  before_script:
+    - |
+      if [ ! -d "$GEAR_CABLE_DIR" ]; then
+        test -n "$GEAR_CABLE_REPOSITORY"
+        git clone --depth 1 --branch "$GEAR_CABLE_REF" "$GEAR_CABLE_REPOSITORY" "$GEAR_CABLE_DIR"
+      fi
+    - ASC_VERSION="$ASC_VERSION" ASC_INSTALL_DIR="$ASC_INSTALL_DIR" "$GEAR_CABLE_DIR/channels/appstore-connect/install-asc.sh"
   script:
     - "$GEAR_CABLE_DIR/channels/appstore-connect/appstore-release.sh" compat
   rules:
